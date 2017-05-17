@@ -1,0 +1,31 @@
+---
+- name:  devops infrastructure configuration
+  hosts: "tag_Platform_workspace:&tag_Environment_{{env}}:&tag_Stack_devops"
+
+  gather_facts: no
+
+  vars_files:
+    - vars/common.yml
+    - vars/secrets.yml
+
+  vars:
+    environments:  "{{devops_environments}}"
+
+  pre_tasks:
+    - name: ubuntu16/py3 hack
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal python3-apt)
+      become: yes
+      register: raw_py2_install
+      changed_when: raw_py2_install.stdout != ""
+
+    - name: ubuntu16/py3 hack
+      raw: apt-get install python3-apt -y 
+      become: yes
+
+    - name: gather_facts
+      setup:
+
+  roles:
+    - devops-configure
+    - jq-packages
+    - nodejs-packages

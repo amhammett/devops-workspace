@@ -1,0 +1,19 @@
+---
+- name:  devops infrastructure provisioning
+  hosts: localhost
+
+  connection: local
+  gather_facts: no
+
+  vars_files:
+    - vars/common.yml
+    - vars/secrets.yml
+
+  vars:
+    environments:  "{{workspace_environments}}"
+    instance_type: "{{dyn_master_ec2_type}}"
+    sg_rules:      "{{dyn_master_sg_rules}}"
+
+  roles:
+    - aws-vpc-facts
+    - { role: aws-ec2-instance, stack: "devops" }

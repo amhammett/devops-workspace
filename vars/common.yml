@@ -1,0 +1,46 @@
+---
+
+platform: workspace
+
+# this is bad and you should change
+meta_ssh_all_list: [ "0.0.0.0/0" ]
+
+# instance variables
+ec2:
+  master:
+    size: "50"
+    type: "t2.medium"
+    sg_rules:
+      - proto: tcp
+        from_port: 22
+        to_port:   22
+        cidr_ip:   "{{meta_ssh_all_list}}"
+
+dyn_master_ec2_type: "{{ec2['master']['type']}}"
+dyn_master_sg_rules: "{{ec2['master']['sg_rules']}}"
+
+workspace_environments:
+    - AWS_ACCESS_KEY_ID:     "{{lookup('ini', 'aws_access_key_id section={{profile}} file=~/.aws/credentials')}}"
+    - AWS_SECRET_ACCESS_KEY: "{{lookup('ini', 'aws_secret_access_key section={{profile}} file=~/.aws/credentials')}}"
+    - AWS_DEFAULT_REGION:    "{{region}}"
+
+devops:
+  packages:
+    apt:
+      - ntp
+      - ntpdate
+      - build-essential
+      - git
+      - software-properties-common
+      - python-pip
+      - python-dev
+      - python-setuptools
+      - libffi-dev
+      - libssl-dev
+    pip:
+      - boto
+      - setuptools==11.3
+      - ansible
+      - boto==2.42.0
+      - awscli
+      - envdir

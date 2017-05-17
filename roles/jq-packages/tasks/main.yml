@@ -1,0 +1,10 @@
+---
+- name: download jq
+  get_url:
+    url:  https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+    dest: /usr/local/bin/jq
+  become: yes
+
+- name: ensure correct permissions
+  file: path=/usr/local/bin/jq mode="0775"
+  become: yes

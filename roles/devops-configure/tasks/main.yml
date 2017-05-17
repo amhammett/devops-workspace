@@ -1,0 +1,23 @@
+---
+- name: update ubuntu packages
+  apt: update_cache=yes
+  become: yes
+
+- name: install ubuntu packages
+  apt: name="{{item}}" state=present
+  with_items:
+    - "{{devops['packages']['apt']}}"
+  become: yes
+
+- name: install pips
+  pip: name="{{item}}" state=latest
+  with_items:
+    - pip
+    - setuptools
+  become: yes
+
+- name: install pips
+  pip: name="{{item}}" state=latest
+  with_items:
+    - "{{devops['packages']['pip']}}"
+  become: yes
