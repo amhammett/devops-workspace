@@ -14,9 +14,9 @@
 
 - name: instance key
   ec2_key:
-    name: "{{platform}}-{{env}}"
-    key_material: '{{dyn_ssh_orchestration_key|b64decode}}'
-    state: present
+    name:         "{{platform}}-{{env}}"
+    key_material: "{{dyn_ssh_orchestration_key}}"
+    state:        present
   environment: "{{environments}}"
 
 - name: instance security group
